@@ -1,0 +1,43 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Profile of {{profile.user.username}}{% endblock %}
+
+{% block content %}
+
+<div class="w-3/4 my-6 mx-auto p-6 bg-white rounded-xl">
+    <div class="flex justify-center">
+        <img src="{{profile.image.url}}" alt="" style="vertical-align: middle;" class="w-[200px] h-[200px] rounded-full">
+    </div>
+    <h1 class="text-center text-3xl font-semibold">{{profile.user.username}}</h1>
+    <div class="w-3/4 mx-auto">
+        <p>{{profile.description|linebreaks}}</p>
+        {% if request.user == profile.user %}
+            <div class="flex space-x-3">
+                <a href="/profile/update/{{user.id}}/" class="mx-auto px-3 py-1 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Update Profile</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="w-3/4 mx-auto p-6 rounded-xl">
+    {% for post in posts %}
+        <div class="rounded-xl p-3 mb-6 md:w-3/4 mx-auto bg-white">
+            <a href="/profile/{{post.author.id}}/" class="flex space-x-3 items-center">
+                <img src="{{post.authorProfile.image.url}}" alt="" class="w-10 h-10 rounded-full">
+                <p>{{post.author.username}}</p>
+            </a>
+            <div>
+                <h1 class="font-semibold text-2xl" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{post.title}}</h1>
+            </div>
+            <p style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">{{post.content|safe}}</p>
+            <a href="/post/{{post.id}}/">See Detail</a>
+            {% if post.headerImg %}
+                <div>
+                    <img src="{{post.headerImg.url}}" alt="" class="w-full">
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

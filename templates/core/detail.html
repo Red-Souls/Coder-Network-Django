@@ -1,0 +1,128 @@
+{% extends 'components/base.html' %}
+
+{% block title %}{{post.title}}{% endblock %}
+
+{% block content %}
+
+<div class="md:grid md:grid-cols-3 md:my-3 md:px-16 md:gap-3 hidden">
+    <div class="col-span-2 bg-white pb-3 mb-3">
+        {% if post.headerImg %}
+            <img src="{{post.headerImg.url}}" alt="" class="object-fill w-full h-60 rounded-t mb-3">
+        {% endif %}
+        <div class="px-6">
+            <a href="/profile/{{post.author.id}}/" class="flex space-x-3 items-center">
+                <img src="{{post.authorProfile.image.url}}" alt="" class="w-20 h-20 rounded-full">
+                <p>
+                    {{post.author.username}}
+                    <br>
+                    Posted on {{post.date}}
+                </p>
+            </a>
+            <h1 class="text-3xl font-semibold">{{post.title}}</h1>
+            <p>{{post.content|linebreaks}}</p>
+            {% if request.user == post.author %}
+                <div class="flex space-x-3">
+                    <a href="/post/update/{{post.id}}/" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Update Post</a>
+                    <a href="/post/delete/{{post.id}}/" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Delete Post</a>
+                </div>
+            {% endif %}
+            <h3 class="font-semibold text-2xl my-3">Comments ({{comments.count}})</h3>
+            {% if not request.user.is_anonymous %}
+                <div class="mb-3 border border-gray-200 p-3 rounded-xl">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="inline-block mb-2">Content</label>
+                            <br>
+                            {{form.content}}
+                        </div>
+                        <button class="px-6 py-3 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Add Comment</button>
+                    </form>
+                </div>
+            {% endif %}
+            <div class="p-3">
+                {% for comment in comments %}
+                    <div class="border border-gray-200 p-3 rounded-xl">
+                        <a href="/profile/{{comment.author.id}}/" class="flex space-x-3 items-center">
+                            <img src="{{comment.authorProfile.image.url}}" alt="" class="w-10 h-10 rounded-full">
+                            <p>{{comment.author.username}}</p>
+                        </a>
+                        <p>Posted on {{comment.date}}</p>
+                        <br>
+                        <p>{{comment.content|linebreaks}}</p>
+                        {% if request.user == comment.author %}
+                            <div class="flex space-x-3 mt-3">
+                                <a href="/comment/delete/{{comment.id}}/" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Delete Comment</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="mx-auto p-6 bg-white rounded-xl">
+            <div class="flex justify-center">
+                <img src="{{post.authorProfile.image.url}}" alt="" style="vertical-align: middle;" class="w-[200px] h-[200px] rounded-full">
+            </div>
+            <h1 class="text-center text-3xl font-semibold">{{post.authorProfile.user.username}}</h1>
+            <p>{{post.authorProfile.description}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white pb-3 my-3 w-3/4 mx-auto md:hidden">
+    {% if post.headerImg %}
+    <img src="{{post.headerImg.url}}" alt="" class="object-fill w-full h-60 rounded-t">
+    {% endif %}
+    <div class="px-6">
+        <a href="/profile/{{post.author.id}}/" class="flex space-x-3 items-center">
+            <img src="{{post.authorProfile.image.url}}" alt="" class="w-20 h-20 rounded-full">
+            <p>
+                {{post.author.username}}
+                <br>
+                Posted on {{post.date}}
+            </p>
+        </a>
+        <h1 class="text-3xl font-semibold">{{post.title}}</h1>
+        <p>{{post.content|safe|linebreaks}}</p>
+        {% if request.user == post.author %}
+            <div class="flex space-x-3">
+                <a href="/post/update/{{post.id}}/" class="px-3 py-1 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Update Post</a>
+                <a href="/post/delete/{{post.id}}/" class="px-3 py-1 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Delete Post</a>
+            </div>
+        {% endif %}
+        <h3 class="font-semibold text-2xl my-3">Comments ({{comments.count}})</h3>
+        <div class="mb-3 border border-gray-200 p-3 rounded-xl">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="inline-block mb-2">Content</label>
+                    <br>
+                    {{form.content}}
+                </div>
+                <button class="px-3 py-1 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Add Comment</button>
+            </form>
+        </div>
+        <div class="p-3">
+            {% for comment in comments %}
+                <div class="border border-gray-200 p-3 rounded-xl">
+                    <a href="/profile/{{comment.author.id}}/" class="flex space-x-3 items-center">
+                        <img src="{{comment.authorProfile.image.url}}" alt="" class="w-10 h-10 rounded-full">
+                        <p>{{comment.author.username}}</p>
+                    </a>
+                    <p>Posted on {{comment.date}}</p>
+                    <br>
+                    <p>{{comment.content}}</p>
+                    {% if request.user == comment.author %}
+                        <div class="flex space-x-3 mt-3">
+                            <a href="/comment/delete/{{comment.id}}/" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Delete Comment</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

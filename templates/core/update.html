@@ -1,0 +1,36 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Update Post - {{post.title}}{% endblock %}
+
+{% block content %}
+
+{% if not request.user.is_anonymous and request.user == post.author %}
+    <div class="w-3/4 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">Update Post - {{post.title}}</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="inline-block mb-2">Title</label>
+                <br>
+                {{form.title}}
+            </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">Content</label>
+                <br>
+                {{form.content}}
+            </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">Header Image</label>
+                <br>
+                {{form.headerImg}}
+            </div>
+            <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Update</button>
+        </form>
+    </div>
+{% else %}
+    <div class="w-3/4 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">You are not allowed to update or delete this post!</h1>
+    </div>
+{% endif %}
+
+{% endblock %}
