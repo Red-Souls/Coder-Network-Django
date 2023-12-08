@@ -119,4 +119,6 @@ def commentDelete(request, id):
     if request.method == 'POST':
         comment.delete()
         return redirect('/post/{}/'.format(postId))
-    return render(request, 'core/deleteComment.html')
+    return render(request, 'core/deleteComment.html', {
+        'comment': comment,
+    })
