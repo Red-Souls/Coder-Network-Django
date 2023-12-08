@@ -29,7 +29,6 @@
             <div>
                 <h1 class="font-semibold text-2xl" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{post.title}}</h1>
             </div>
-            <p style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">{{post.content|safe}}</p>
             <a href="/post/{{post.id}}/">See Detail</a>
             {% if post.headerImg %}
                 <div>
